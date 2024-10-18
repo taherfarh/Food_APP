@@ -1,22 +1,26 @@
 class Userdata {
-  final String idCategory;
-  final String strCategory;
-  final String strCategoryThumb;
-  final String strCategoryDescription;
+  String strMeal;
+  String strMealThumb;
+  String idMeal;
 
-  Userdata({
-    required this.idCategory,
-    required this.strCategory,
-    required this.strCategoryThumb,
-    required this.strCategoryDescription,
-  });
+  Userdata({required this.strMeal, required this.strMealThumb, required this.idMeal});
 
   factory Userdata.fromJson(Map<String, dynamic> json) {
     return Userdata(
-      idCategory: json['idCategory'],
-      strCategory: json['strCategory'],
-      strCategoryThumb: json['strCategoryThumb'],
-      strCategoryDescription: json['strCategoryDescription'],
+      strMeal: json['strMeal'],
+      strMealThumb: json['strMealThumb'],
+      idMeal: json['idMeal'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'strMeal': strMeal,
+      'strMealThumb': strMealThumb,
+      'idMeal': idMeal,
+    };
+  }
 }
+
+
+// Userdata

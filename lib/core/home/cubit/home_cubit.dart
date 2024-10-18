@@ -16,36 +16,37 @@ class HomeCubit extends Cubit<HomeState> {
   static HomeCubit get(context) => BlocProvider.of<HomeCubit>(context);
 
   void getdata() async {
-  emit(Homeloading());
-  try {
-    var response = await http.get(Uri.parse("https://www.themealdb.com/api/json/v1/1/categories.php"));
-    if (response.statusCode == 200) {
-      // Decode the response body
-      var decodedResponse = jsonDecode(response.body);
-      
-      // Print the full decoded response for debugging
-      print(decodedResponse);
+    emit(Homeloading());
+    try {
+      var response = await http.get(Uri.parse(
+          "https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast"));
+      if (response.statusCode == 200) {
+        // Decode the response body
+        var decodedResponse = jsonDecode(response.body);
 
-      // Access the 'categories' key from the decoded response
-      List<dynamic> categories = decodedResponse['categories'];
-      
-      // Check if categories is indeed a List
-      if (categories is List) {
-        // Map the list to Userdata instances
-        List<Userdata> userlist = categories.map((item) => Userdata.fromJson(item)).toList();
-        
-        // Emit success with the list
-        emit(HomeSuccess(userlist: userlist));
+        // Print the full decoded response for debugging
+        print(decodedResponse);
+
+        // Access the 'categories' key from the decoded response
+        List<dynamic> mealslist = decodedResponse['meals'];
+
+        // Check if categories is indeed a List
+        if (mealslist is List) {
+          // Map the list to Userdata instances
+          List<Userdata> userlist =
+              mealslist.map((item) => Userdata.fromJson(item)).toList();
+
+          // Emit success with the list
+          emit(HomeSuccess(userlist: userlist));
+        } else {
+          emit(HomeError(errormsg: "Categories is not a list"));
+        }
       } else {
-        emit(HomeError(errormsg: "Categories is not a list"));
+        emit(HomeError(errormsg: "Failed to load data"));
       }
-    } else {
-      emit(HomeError(errormsg: "Failed to load data"));
+    } catch (e) {
+      print(e.toString());
+      emit(HomeError(errormsg: e.toString()));
     }
-  } catch (e) {
-    print(e.toString());
-    emit(HomeError(errormsg: e.toString()));
   }
-}
-
 }
